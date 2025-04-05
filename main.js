@@ -39,7 +39,7 @@ const update = (dt) => {
 
     // Update camera delta
     if (go.keys.up) {
-        go.cameraDelta = 50
+        go.cameraDelta = 80
     } else if (go.keys.down) {
         go.cameraDelta = -50
     } else {

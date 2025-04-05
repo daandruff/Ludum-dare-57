@@ -1,7 +1,9 @@
+const sprShadow = new Image()
 const sprBlock = new Image()
 const sprBlockTop = new Image()
 const sprBlockGrassA = new Image()
 const sprBlockGrassB = new Image()
+sprShadow.src = './img/shadow.png'
 sprBlock.src = './img/block.png'
 sprBlockTop.src = './img/block_top.png'
 sprBlockGrassA.src = './img/block_grass_a.png'
@@ -21,6 +23,11 @@ export class Map {
     }
 
     draw(go) {
+        const playerPos = {
+            x: go.player.pos.x / 16,
+            y: go.player.pos.y / 16
+        }
+
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
                 const tile = this.data[y * this.width + x]
@@ -32,7 +39,17 @@ export class Map {
                 if (tile === 4) { selectedTileSprite = sprBlockGrassB }
 
                 if (selectedTileSprite) {
-                    go.ctx.drawImage(selectedTileSprite, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
+                    const dx = playerPos.x - x
+                    const dy = playerPos.y - y
+                    const distance = Math.sqrt(dx * dx + dy * dy)
+
+                    if (distance < 4) {
+                        go.ctx.drawImage(selectedTileSprite, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
+                        go.ctx.drawImage(sprShadow, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
+                    }
+                    if (distance < 2) {
+                        go.ctx.drawImage(selectedTileSprite, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
+                    }
                 }
             }
         }

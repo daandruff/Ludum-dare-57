@@ -16,7 +16,7 @@ export class Player {
 
         this.onGround = false
         this.gravity = 0
-        this.strength = 2.5
+        this.strength = 2.6
         this.speed = 0.075
     }
 
