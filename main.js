@@ -1,5 +1,6 @@
 import { Map } from "./src/map.js"
 import { Player } from "./src/player.js"
+import { Particles } from "./src/particles.js"
 
 const cnv = document.querySelector('canvas')
 const ctx = cnv.getContext('2d')
@@ -27,6 +28,7 @@ const go = {
 
     map: new Map(),
     player: new Player(),
+    dust: new Particles(),
     time: 0
 }
 
@@ -37,9 +39,9 @@ const update = (dt) => {
 
     // Update camera delta
     if (go.keys.up) {
-        go.cameraDelta = 30
+        go.cameraDelta = 50
     } else if (go.keys.down) {
-        go.cameraDelta = -30
+        go.cameraDelta = -50
     } else {
         go.cameraDelta = 0
     }
@@ -56,6 +58,9 @@ const update = (dt) => {
     if (go.cameraVis !== go.camera) {
         go.cameraVis += (go.camera - go.cameraVis) * 0.01 * dt
     }
+
+    // Update particle effects
+    go.dust.update(go, dt)
 }
 
 // Main draw-function
@@ -65,6 +70,7 @@ const draw = () => {
 
     go.map.draw(go)
     go.player.draw(go)
+    go.dust.draw(go)
 }
 
 // Main loop
