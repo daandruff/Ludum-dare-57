@@ -23,12 +23,15 @@ const go = {
         down: 0,
         left: 0,
         right: 0,
-        jump: 0
+        jump: 0,
+        use: 0
     },
 
     map: new Map(),
     player: new Player(),
     dust: new Particles(),
+    glowstickInv: 4,
+    glowstickList: [],
     time: 0
 }
 
@@ -36,6 +39,9 @@ const go = {
 const update = (dt) => {
     go.map.update(go, dt)
     go.player.update(go, dt)
+    go.glowstickList.forEach(glowstick => {
+        glowstick.update(go, dt)
+    })
 
     // Update camera delta
     if (go.keys.up) {
@@ -69,6 +75,9 @@ const draw = () => {
     go.ctx.fillRect(0, 0, go.width, go.height)
 
     go.map.draw(go)
+    go.glowstickList.forEach(glowstick => {
+        glowstick.draw(go)
+    })
     go.player.draw(go)
     go.dust.draw(go)
 }
@@ -93,6 +102,7 @@ document.addEventListener('keydown', (e) => {
     if (e.code === 'ArrowLeft') { go.keys.left = 1 }
     if (e.code === 'ArrowRight') { go.keys.right = 1 }
     if (e.code === 'Space') { go.keys.jump = 1 }
+    if (e.code === 'KeyA') { go.keys.use = 1 }
 })
 
 document.addEventListener('keyup', (e) => {
@@ -101,6 +111,7 @@ document.addEventListener('keyup', (e) => {
     if (e.code === 'ArrowLeft') { go.keys.left = 0 }
     if (e.code === 'ArrowRight') { go.keys.right = 0 }
     if (e.code === 'Space') { go.keys.jump = 0 }
+    if (e.code === 'KeyA') { go.keys.use = 0 }
 })
 
 // Init loop

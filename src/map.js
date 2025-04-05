@@ -23,10 +23,21 @@ export class Map {
     }
 
     draw(go) {
-        const playerPos = {
+        const lightPositions = []
+
+        // Add player as light source
+        lightPositions.push({
             x: go.player.pos.x / 16,
             y: go.player.pos.y / 16
-        }
+        })
+
+        // Add glowsticks
+        go.glowstickList.forEach(glowstick => {
+            lightPositions.push({
+                x: glowstick.pos.x / 16,
+                y: glowstick.pos.y / 16
+            })
+        })
 
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
@@ -39,15 +50,23 @@ export class Map {
                 if (tile === 4) { selectedTileSprite = sprBlockGrassB }
 
                 if (selectedTileSprite) {
-                    const dx = playerPos.x - x
-                    const dy = playerPos.y - y
-                    const distance = Math.sqrt(dx * dx + dy * dy)
+                    let lightDistance = 100
+                    lightPositions.forEach(position => {
+                        const dx = position.x - x
+                        const dy = position.y - y
+                        const distance = Math.sqrt(dx * dx + dy * dy)
 
-                    if (distance < 4) {
+                        if (distance < lightDistance) {
+                            lightDistance = distance
+                        }
+                    })
+
+
+                    if (lightDistance < 3.5) {
                         go.ctx.drawImage(selectedTileSprite, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
                         go.ctx.drawImage(sprShadow, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
                     }
-                    if (distance < 2) {
+                    if (lightDistance < 2.5) {
                         go.ctx.drawImage(selectedTileSprite, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
                     }
                 }

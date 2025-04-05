@@ -1,3 +1,5 @@
+import { Glowstick } from "./glowstick.js"
+
 const sprNormal = new Image()
 const sprUp = new Image()
 const sprDown = new Image()
@@ -24,7 +26,7 @@ export class Player {
         // Update position
         const prePos = {...this.pos}
 
-        this.gravity += 0.1
+        this.gravity += 0.006 * dt
         if (this.gravity > this.strength) {
             this.gravity = this.strength
         } else if (this.gravity < -this.strength) {
@@ -55,6 +57,11 @@ export class Player {
             activeSprite = sprDown
         } else {
             activeSprite = sprNormal
+        }
+
+        if (go.keys.use) {
+            go.keys.use = 0
+            go.glowstickList.push(new Glowstick(this.pos.x, this.pos.y))
         }
     }
 
