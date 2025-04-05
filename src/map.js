@@ -62,7 +62,7 @@ export class Map {
                     })
 
 
-                    if (lightDistance < 3.5) {
+                    if (lightDistance < 3.5 && lightDistance >= 2.5) {
                         go.ctx.drawImage(selectedTileSprite, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
                         go.ctx.drawImage(sprShadow, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
                     }

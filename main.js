@@ -74,10 +74,10 @@ const draw = () => {
     go.ctx.fillStyle = '#3c0000'
     go.ctx.fillRect(0, 0, go.width, go.height)
 
-    go.map.draw(go)
     go.glowstickList.forEach(glowstick => {
         glowstick.draw(go)
     })
+    go.map.draw(go)
     go.player.draw(go)
     go.dust.draw(go)
 }
