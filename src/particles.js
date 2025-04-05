@@ -27,8 +27,8 @@ export class Particles {
         }
 
         this.particles.forEach(particle => {
-            particle.pos.x += (Math.random() -.5) * dt / 50
-            particle.pos.y += (Math.random() -.5) * dt / 50
+            particle.pos.x += (Math.random() -.6) * dt / 50
+            particle.pos.y += (Math.random() -.3) * dt / 50
             particle.life += dt
         })
 
