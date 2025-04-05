@@ -1,13 +1,15 @@
 import { Glowstick } from "./glowstick.js"
 
-const sprNormal = new Image()
+const sprNormalR = new Image()
+const sprNormalL = new Image()
 const sprUp = new Image()
 const sprDown = new Image()
-sprNormal.src = './img/player_normal.png'
+sprNormalR.src = './img/player_normal_r.png'
+sprNormalL.src = './img/player_normal_l.png'
 sprUp.src = './img/player_up.png'
 sprDown.src = './img/player_down.png'
 
-let activeSprite = sprNormal
+let activeSprite = sprNormalR
 
 export class Player {
     constructor() {
@@ -16,7 +18,8 @@ export class Player {
             y: 13
         }
 
-        this.onGround = false
+        this.latestDirection = 1
+        this.onGround = true
         this.gravity = 0
         this.strength = 2.6
         this.speed = 0.075
@@ -35,8 +38,13 @@ export class Player {
         this.pos.y += this.gravity
         if (this.isColliding(go)) {
             this.pos.y = prePos.y
+            if (this.gravity > 0) {
+                this.onGround = true
+            }
             this.gravity = 0
-            this.onGround = true
+        }
+        if (Math.abs(this.gravity) > 1) {
+            this.onGround = false
         }
 
         if (go.keys.jump && this.onGround) {
@@ -44,8 +52,14 @@ export class Player {
             this.onGround = false
         }
         
-        if (go.keys.right) { this.pos.x += this.speed * dt }
-        if (go.keys.left) { this.pos.x -= this.speed * dt }
+        if (go.keys.right) {
+            this.pos.x += this.speed * dt
+            this.latestDirection = 1
+        }
+        if (go.keys.left) {
+            this.pos.x -= this.speed * dt
+            this.latestDirection = -1
+        }
         if (this.isColliding(go)) {
             this.pos.x = prePos.x
         }
@@ -56,12 +70,24 @@ export class Player {
         } else if (go.keys.down) {
             activeSprite = sprDown
         } else {
-            activeSprite = sprNormal
+            if (this.latestDirection > 0) {
+                activeSprite = sprNormalR
+            } else {
+                activeSprite = sprNormalL
+            }
         }
 
         if (go.keys.use) {
             go.keys.use = 0
-            go.glowstickList.push(new Glowstick(this.pos.x, this.pos.y))
+
+            // Calculate throwing force
+            let force = 0.02
+            if (go.keys.right || go.keys.right) {
+                force += 0.05
+            }
+            force = force * this.latestDirection
+
+            go.glowstickList.push(new Glowstick(this.pos.x, this.pos.y, force))
         }
     }
 

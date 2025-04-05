@@ -4,13 +4,14 @@ sprNormal.src = './img/glowstick.png'
 let activeSprite = sprNormal
 
 export class Glowstick {
-    constructor(x, y) {
+    constructor(x, y, force) {
         this.pos = {
             x: x,
             y: y
         }
+        this.force = force
 
-        this.gravity = -2
+        this.gravity = -1
         this.strength = 2.6
         this.speed = 0.075
     }
@@ -30,10 +31,13 @@ export class Glowstick {
             this.pos.y = prePos.y
             this.gravity = 0
             this.onGround = true
+            this.force *= 0.9
         }
         
+        this.pos.x += this.force * dt
         if (this.isColliding(go)) {
             this.pos.x = prePos.x
+            this.force *= -1
         }
     }
 
