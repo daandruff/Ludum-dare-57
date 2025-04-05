@@ -29,7 +29,7 @@ const go = {
 
     map: new Map(),
     player: new Player(),
-    dust: new Particles(),
+    dust: new Particles(0, 0, 288, 152, true),
     glowstickInv: 4,
     glowstickList: [],
     time: 0
@@ -77,9 +77,9 @@ const draw = () => {
     go.glowstickList.forEach(glowstick => {
         glowstick.draw(go)
     })
+    go.dust.draw(go)
     go.map.draw(go)
     go.player.draw(go)
-    go.dust.draw(go)
 }
 
 // Main loop
