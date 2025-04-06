@@ -31,7 +31,7 @@ export class Player {
     constructor() {
         this.pos = {
             x: 0,
-            y: 13
+            y: -10
         }
 
         this.latestDirection = 1
@@ -66,30 +66,30 @@ export class Player {
 
                     if (fallHeight > 7) {
                         this.health -= 100
-                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 90, 8)
+                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 200, 8)
                         go.hud.hurt = 1500
                     } else if (fallHeight > 6) {
                         this.health -= 80
-                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 80, 7)
+                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 150, 7)
                         go.hud.hurt = 1250
                     } else if (fallHeight > 5) {
                         this.health -= 60
-                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 70, 6)
+                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 130, 6)
                         go.hud.hurt = 1000
                     } else if (fallHeight > 4) {
                         this.health -= 40
-                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 60, 5)
+                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 110, 5)
                         go.hud.hurt = 750
                     } else if (fallHeight > 3) {
                         this.health -= 20
-                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 50, 4)
+                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 90, 4)
                         go.hud.hurt = 500
                     } else {
                         // Here we should have some landing particles
                         //go.hurtEffect = new SpotParticles(this.pos.x + 8, this.pos.y + 16, 0, 0, false, 50, 4)
                     }
     
-                    if (fallHeight > 2) {
+                    if (fallHeight > 3) {
                         this.playSound(go, sfxHurt)
                     } else {
                         this.playSound(go, sfxJump)

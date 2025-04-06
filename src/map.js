@@ -3,11 +3,13 @@ const sprBlock = new Image()
 const sprBlockTop = new Image()
 const sprBlockGrassA = new Image()
 const sprBlockGrassB = new Image()
+const sprNextLevel = new Image()
 sprShadow.src = './img/shadow.png'
 sprBlock.src = './img/block.png'
 sprBlockTop.src = './img/block_top.png'
 sprBlockGrassA.src = './img/block_grass_a.png'
 sprBlockGrassB.src = './img/block_grass_b.png'
+sprNextLevel.src = './img/nextlevel.png'
 
 export class Map {
     constructor(height = 60) {
@@ -16,10 +18,11 @@ export class Map {
 
         this.data = Array(this.width * this.height)
         this.generate()
+        this.timer = 0
     }
 
     update(go, dt) {
-
+        this.timer += dt / 1000
     }
 
     draw(go) {
@@ -72,6 +75,8 @@ export class Map {
                 }
             }
         }
+
+        go.ctx.drawImage(sprNextLevel, 125, 32 + (this.height * 16 + Math.floor(Math.sin(this.timer * 5) * 10)) - go.cameraVis + go.cameraVisDelta)
     }
 
     generate() {

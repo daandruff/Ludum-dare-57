@@ -7,12 +7,14 @@ const cnv = document.querySelector('canvas')
 const ctx = cnv.getContext('2d')
 
 // Screens
+const scrTitle = new Image()
 const scrShade = new Image()
 const scrDeath = new Image()
 const scrYou = new Image()
 const scrHealth = new Image()
 const scrShovel = new Image()
 const scrGlowsticks = new Image()
+scrTitle.src = './img/titlescreen.png'
 scrShade.src = './img/fullscreen_shade.png'
 scrDeath.src = './img/fullscreen_death.png'
 scrYou.src = './img/fullscreen_you.png'
@@ -36,7 +38,7 @@ const go = {
     cameraDelta: 0,
     cameraVisDelta: 0,
 
-    tutorial: 1,
+    tutorial: 0,
 
     keys: {
         up: 0,
@@ -66,8 +68,10 @@ const go = {
 
 // Main update-function
 const update = (dt) => {
-    go.map.update(go, dt)
-    go.player.update(go, dt)
+    if (go.tutorial !== 0) {
+        go.map.update(go, dt)
+        go.player.update(go, dt)
+    }
     go.glowstickList.forEach(glowstick => {
         glowstick.update(go, dt)
     })
@@ -103,7 +107,9 @@ const update = (dt) => {
     }
 
     // Update hud
-    go.hud.update(go, dt)
+    if (go.tutorial !== 0) {
+        go.hud.update(go, dt)
+    }
 
     // Mute game
     if (go.keys.mute) {
@@ -131,8 +137,10 @@ const draw = () => {
         glowstick.draw(go)
     })
     go.dust.draw(go)
-    go.map.draw(go)
-    go.player.draw(go)
+    if (go.tutorial !== 0) {
+        go.map.draw(go)
+        go.player.draw(go)
+    }
     if (go.hurtEffect) {
         go.hurtEffect.draw(go)
     }
@@ -143,8 +151,9 @@ const draw = () => {
     }
 
     go.hud.draw(go)
-
-    if (go.tutorial === 1) {
+    if (go.tutorial === 0) {
+        go.ctx.drawImage(scrTitle, 0, 0)
+    } else if (go.tutorial === 1) {
         go.ctx.drawImage(scrYou, 0, 0)
     } else if (go.tutorial === 2) {
         go.ctx.drawImage(scrHealth, 0, 0)
@@ -170,7 +179,7 @@ const step = (time) => {
 
 // Input-handling
 document.addEventListener('keydown', (e) => {
-    if (go.tutorial > 0 && go.tutorial < 5) {
+    if (go.tutorial >= 0 && go.tutorial < 5) {
         go.tutorial++
         return
     }
