@@ -44,33 +44,36 @@ export class Map {
 
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
-                const tile = this.data[y * this.width + x]
+                let yPos = y * 16 - go.cameraVis + go.cameraVisDelta
+                if (!(yPos < -16 || yPos > go.height + 16)) {
+                    const tile = this.data[y * this.width + x]
 
-                let selectedTileSprite = false
-                if (tile === 1) { selectedTileSprite = sprBlock }
-                if (tile === 2) { selectedTileSprite = sprBlockTop }
-                if (tile === 3) { selectedTileSprite = sprBlockGrassA }
-                if (tile === 4) { selectedTileSprite = sprBlockGrassB }
+                    let selectedTileSprite = false
+                    if (tile === 1) { selectedTileSprite = sprBlock }
+                    if (tile === 2) { selectedTileSprite = sprBlockTop }
+                    if (tile === 3) { selectedTileSprite = sprBlockGrassA }
+                    if (tile === 4) { selectedTileSprite = sprBlockGrassB }
 
-                if (selectedTileSprite) {
-                    let lightDistance = 100
-                    lightPositions.forEach(position => {
-                        const dx = position.x - x
-                        const dy = position.y - y
-                        const distance = Math.sqrt(dx * dx + dy * dy)
+                    if (selectedTileSprite) {
+                        let lightDistance = 100
+                        lightPositions.forEach(position => {
+                            const dx = position.x - x
+                            const dy = position.y - y
+                            const distance = Math.sqrt(dx * dx + dy * dy)
 
-                        if (distance < lightDistance) {
-                            lightDistance = distance
+                            if (distance < lightDistance) {
+                                lightDistance = distance
+                            }
+                        })
+
+
+                        if (lightDistance < 3.5 && lightDistance >= 2.5) {
+                            go.ctx.drawImage(selectedTileSprite, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
+                            go.ctx.drawImage(sprShadow, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
                         }
-                    })
-
-
-                    if (lightDistance < 3.5 && lightDistance >= 2.5) {
-                        go.ctx.drawImage(selectedTileSprite, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
-                        go.ctx.drawImage(sprShadow, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
-                    }
-                    if (lightDistance < 2.5) {
-                        go.ctx.drawImage(selectedTileSprite, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
+                        if (lightDistance < 2.5) {
+                            go.ctx.drawImage(selectedTileSprite, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
+                        }
                     }
                 }
             }
