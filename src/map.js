@@ -10,9 +10,9 @@ sprBlockGrassA.src = './img/block_grass_a.png'
 sprBlockGrassB.src = './img/block_grass_b.png'
 
 export class Map {
-    constructor() {
+    constructor(height = 60) {
         this.width = 18
-        this.height = 60
+        this.height = height
 
         this.data = Array(this.width * this.height)
         this.generate()

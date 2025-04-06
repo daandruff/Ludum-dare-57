@@ -1,4 +1,5 @@
 import { Glowstick } from "./glowstick.js"
+import { Map } from "./map.js"
 import { SpotParticles } from "./spot-particles.js"
 
 // Sprites
@@ -76,8 +77,8 @@ export class Player {
                     this.health -= 40
                     go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 60, 5)
                     go.hud.hurt = 750
-                } else if (fallHeight > 2) {
-                    this.health -= 15
+                } else if (fallHeight > 3) {
+                    this.health -= 20
                     go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 50, 4)
                     go.hud.hurt = 500
                 } else {
@@ -204,6 +205,11 @@ export class Player {
                 }
             }
         }
+
+        // Check if map is done
+        if (this.pos.y > go.map.height * 16 + 200) {
+            this.nextLevel(go)
+        }
     }
 
     draw(go) {
@@ -232,5 +238,20 @@ export class Player {
                 sound.play(0)
             }
         }
+    }
+
+    nextLevel(go) {
+        go.mapHeight += 20
+        go.map = new Map(go.mapHeight)
+        go.glowstickList = []
+
+        let heightDiff = this.pos.y + 200
+        this.pos.y -= heightDiff
+
+        go.cameraVis -= heightDiff
+        go.camera -= heightDiff
+
+        go.glowstickInv += 2
+        go.shovelInv += 2
     }
 }

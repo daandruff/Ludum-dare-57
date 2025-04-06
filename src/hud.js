@@ -49,9 +49,9 @@ export class Hud {
         }
 
         if (go.mute) {
-            go.ctx.drawImage(sprSpeakOff, go.width - 16, go.height - 16)
+            go.ctx.drawImage(sprSpeakOff, go.width - 18, go.height - 18)
         } else {
-            go.ctx.drawImage(sprSpeakOn, go.width - 16, go.height - 16)
+            go.ctx.drawImage(sprSpeakOn, go.width - 18, go.height - 18)
         }
     }
 }

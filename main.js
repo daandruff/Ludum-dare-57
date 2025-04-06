@@ -32,14 +32,15 @@ const go = {
         mute: 0
     },
 
-    map: new Map(),
+    map: new Map(40),
+    mapHeight: 40,
     hud: new Hud(),
     player: new Player(),
     dust: new DustParticles(0, 0, 288, 152, true),
     hurtEffect: false,
-    glowstickInv: 4,
+    glowstickInv: 5,
     glowstickList: [],
-    shovelInv: 3,
+    shovelInv: 4,
     time: 0
 }
 
