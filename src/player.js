@@ -1,6 +1,7 @@
 import { Glowstick } from "./glowstick.js"
 import { SpotParticles } from "./spot-particles.js"
 
+// Sprites
 const sprNormalR = new Image()
 const sprNormalL = new Image()
 const sprUp = new Image()
@@ -9,6 +10,19 @@ sprNormalR.src = './img/player_normal_r.png'
 sprNormalL.src = './img/player_normal_l.png'
 sprUp.src = './img/player_up.png'
 sprDown.src = './img/player_down.png'
+
+// Sound
+const sfxJump = new Audio()
+const sfxLand = new Audio()
+const sfxHurt = new Audio()
+const sfxDig = new Audio()
+const sfxThrow = new Audio()
+sfxJump.src = './sfx/jump.wav'
+sfxLand.src = './sfx/land.wav'
+sfxHurt.src = './sfx/hurt.wav'
+sfxDig.src = './sfx/dig.wav'
+sfxThrow.src = './sfx/throw.wav'
+sfxThrow.volume = 0.5
 
 let activeSprite = sprNormalR
 
@@ -71,6 +85,12 @@ export class Player {
                     //go.hurtEffect = new SpotParticles(this.pos.x + 8, this.pos.y + 16, 0, 0, false, 50, 4)
                 }
 
+                if (fallHeight > 2) {
+                    this.playSound(go, sfxHurt)
+                } else {
+                    this.playSound(go, sfxJump)
+                }
+
                 if (this.health < 0) {
                     this.health = 0
                 }
@@ -87,6 +107,7 @@ export class Player {
                 this.gravity = -this.strength
                 this.onGround = false
                 this.startFall = this.pos.y
+                this.playSound(go, sfxJump)
             }
             
             if (go.keys.right) {
@@ -130,6 +151,7 @@ export class Player {
         
                     go.glowstickList.push(new Glowstick(this.pos.x, this.pos.y, force))
                     go.glowstickInv--
+                    this.playSound(go, sfxThrow)
                 }
             }
 
@@ -176,6 +198,7 @@ export class Player {
                             }
 
                             go.shovelInv--
+                            this.playSound(go, sfxDig)
                         }
                     }
                 }
@@ -201,5 +224,13 @@ export class Player {
         }
 
         return false
+    }
+
+    playSound(go, sound) {
+        if (!go.mute) {
+            if (sound) {
+                sound.play(0)
+            }
+        }
     }
 }

@@ -1,9 +1,13 @@
 const sprLife = new Image()
 const sprShovel = new Image()
 const sprGlowstick = new Image()
+const sprSpeakOn = new Image()
+const sprSpeakOff = new Image()
 sprLife.src = './img/hud_life.png'
 sprShovel.src = './img/hud_shovel.png'
 sprGlowstick.src = './img/hud_glowstick.png'
+sprSpeakOn.src = './img/speaker_on.png'
+sprSpeakOff.src = './img/speaker_off.png'
 
 export class Hud {
     constructor() {
@@ -25,8 +29,8 @@ export class Hud {
     draw(go) {
         // HUD shake
         let posVis = {...this.pos}
-        posVis.x += Math.floor((Math.random() -.5) * 50 * this.hurt / 8000)
-        posVis.y += Math.floor((Math.random() -.5) * 20 * this.hurt / 8000)
+        posVis.x += Math.ceil((Math.random() -.5) * 50 * this.hurt / 8000)
+        posVis.y += Math.ceil((Math.random() -.5) * 20 * this.hurt / 8000)
 
         // Draw life
         let healthHeight = Math.floor(go.player.health / 10)
@@ -42,6 +46,12 @@ export class Hud {
         // Draw shovels
         for (let i = 0; i < go.shovelInv; i++) {
             go.ctx.drawImage(sprShovel, posVis.x - (6 * i) - 7, posVis.y + 4)
+        }
+
+        if (go.mute) {
+            go.ctx.drawImage(sprSpeakOff, go.width - 16, go.height - 16)
+        } else {
+            go.ctx.drawImage(sprSpeakOn, go.width - 16, go.height - 16)
         }
     }
 }

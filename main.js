@@ -95,6 +95,10 @@ const update = (dt) => {
             go.mute = true
         }
     }
+
+    if (!go.mute && go.music.paused) {
+        go.music.play()
+    }
 }
 
 // Main draw-function
@@ -134,8 +138,8 @@ document.addEventListener('keydown', (e) => {
     if (e.code === 'ArrowLeft') { go.keys.left = 1 }
     if (e.code === 'ArrowRight') { go.keys.right = 1 }
     if (e.code === 'Space') { go.keys.jump = 1 }
-    if (e.code === 'KeyA') { go.keys.use = 1 }
-    if (e.code === 'KeyS') { go.keys.dig = 1 }
+    if (e.code === 'KeyA') { go.keys.dig = 1 }
+    if (e.code === 'KeyS') { go.keys.use = 1 }
     if (e.code === 'KeyM') { go.keys.mute = 1 }
 })
 
@@ -145,8 +149,8 @@ document.addEventListener('keyup', (e) => {
     if (e.code === 'ArrowLeft') { go.keys.left = 0 }
     if (e.code === 'ArrowRight') { go.keys.right = 0 }
     if (e.code === 'Space') { go.keys.jump = 0 }
-    if (e.code === 'KeyA') { go.keys.use = 0 }
-    if (e.code === 'KeyS') { go.keys.dig = 0 }
+    if (e.code === 'KeyA') { go.keys.dig = 0 }
+    if (e.code === 'KeyS') { go.keys.use = 0 }
     if (e.code === 'KeyM') { go.keys.mute = 0 }
 })
 
