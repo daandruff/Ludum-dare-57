@@ -42,7 +42,24 @@ export class Player {
             this.pos.y = prePos.y
             if (this.gravity > 0 && this.onGround === false) {
                 this.onGround = true
-                console.log((this.pos.y - this.startFall) / 16)
+
+                let fallHeight = (this.pos.y - this.startFall) / 16
+
+                if (fallHeight > 7) {
+                    this.health -= 100
+                } else if (fallHeight > 6) {
+                    this.health -= 80
+                } else if (fallHeight > 5) {
+                    this.health -= 60
+                } else if (fallHeight > 4) {
+                    this.health -= 40
+                } else if (fallHeight > 3) {
+                    this.health -= 20
+                }
+
+                if (this.health < 0) {
+                    this.health = 0
+                }
             }
             this.gravity = 0
         }
@@ -51,96 +68,101 @@ export class Player {
             this.startFall = this.pos.y
         }
 
-        if (go.keys.jump && this.onGround) {
-            this.gravity = -this.strength
-            this.onGround = false
-        }
-        
-        if (go.keys.right) {
-            this.pos.x += this.speed * dt
-            this.latestDirection = 1
-        }
-        if (go.keys.left) {
-            this.pos.x -= this.speed * dt
-            this.latestDirection = -1
+        if (this.health > 0) {
+            if (go.keys.jump && this.onGround) {
+                this.gravity = -this.strength
+                this.onGround = false
+                this.startFall = this.pos.y
+            }
+            
+            if (go.keys.right) {
+                this.pos.x += this.speed * dt
+                this.latestDirection = 1
+            }
+            if (go.keys.left) {
+                this.pos.x -= this.speed * dt
+                this.latestDirection = -1
+            }
         }
         if (this.isColliding(go)) {
             this.pos.x = prePos.x
         }
 
         // Update sprite
-        if (go.keys.up) {
-            activeSprite = sprUp
-        } else if (go.keys.down) {
-            activeSprite = sprDown
-        } else {
-            if (this.latestDirection > 0) {
-                activeSprite = sprNormalR
+        if (this.health > 0) {
+            if (go.keys.up) {
+                activeSprite = sprUp
+            } else if (go.keys.down) {
+                activeSprite = sprDown
             } else {
-                activeSprite = sprNormalL
-            }
-        }
-
-        // Throw glowstick
-        if (go.keys.use) {
-            go.keys.use = 0
-
-            // Calculate throwing force
-            if (go.glowstickInv) {
-                let force = 0.02
-                if (go.keys.right || go.keys.right) {
-                    force += 0.05
-                }
-                force = force * this.latestDirection
-    
-                go.glowstickList.push(new Glowstick(this.pos.x, this.pos.y, force))
-                go.glowstickInv--
-            }
-        }
-
-        // Dig tile out
-        if (go.keys.dig) {
-            go.keys.dig = 0
-
-            if (go.shovelInv) {
-                let gridPos = {
-                    x: Math.floor((this.pos.x + 8) / 16),
-                    y: Math.floor((this.pos.y + 16) / 16)
-                }
-
-                let digPos = {...gridPos}
-
-                if (go.keys.up || go.keys.down) {
-                    if (go.keys.up) {
-                        digPos.y--
-                    } else {
-                        digPos.y++
-                    }
+                if (this.latestDirection > 0) {
+                    activeSprite = sprNormalR
                 } else {
-                    digPos.x += this.latestDirection
+                    activeSprite = sprNormalL
                 }
+            }
 
-                // Make sure we are digging inside the map
-                if (digPos.x >= 0 && digPos.x < go.map.width && digPos.y >= 0 && digPos.y < go.map.height) {
-                    let tileData = go.map.data[digPos.y * go.map.width + digPos.x]
-                    
-                    // Make sure you can dig the tile
-                    if (tileData === 1 || tileData === 2) {
-                        go.map.data[digPos.y * go.map.width + digPos.x] = 0
+            // Throw glowstick
+            if (go.keys.use) {
+                go.keys.use = 0
 
-                        // Remove grass a top tile
-                        let aboveTileData = go.map.data[(digPos.y - 1) * go.map.width + digPos.x]
-                        if (aboveTileData === 3 || aboveTileData === 4) {
-                            go.map.data[(digPos.y - 1) * go.map.width + digPos.x] = 0
+                // Calculate throwing force
+                if (go.glowstickInv) {
+                    let force = 0.02
+                    if (go.keys.right || go.keys.right) {
+                        force += 0.05
+                    }
+                    force = force * this.latestDirection
+        
+                    go.glowstickList.push(new Glowstick(this.pos.x, this.pos.y, force))
+                    go.glowstickInv--
+                }
+            }
+
+            // Dig tile out
+            if (go.keys.dig) {
+                go.keys.dig = 0
+
+                if (go.shovelInv) {
+                    let gridPos = {
+                        x: Math.floor((this.pos.x + 8) / 16),
+                        y: Math.floor((this.pos.y + 16) / 16)
+                    }
+
+                    let digPos = {...gridPos}
+
+                    if (go.keys.up || go.keys.down) {
+                        if (go.keys.up) {
+                            digPos.y--
+                        } else {
+                            digPos.y++
                         }
+                    } else {
+                        digPos.x += this.latestDirection
+                    }
 
-                        // Adjust new block below to be top-layer
-                        let belowTileData = go.map.data[(digPos.y + 1) * go.map.width + digPos.x]
-                        if (belowTileData === 1) {
-                            go.map.data[(digPos.y + 1) * go.map.width + digPos.x] = 2
+                    // Make sure we are digging inside the map
+                    if (digPos.x >= 0 && digPos.x < go.map.width && digPos.y >= 0 && digPos.y < go.map.height) {
+                        let tileData = go.map.data[digPos.y * go.map.width + digPos.x]
+                        
+                        // Make sure you can dig the tile
+                        if (tileData === 1 || tileData === 2) {
+                            go.map.data[digPos.y * go.map.width + digPos.x] = 0
+
+                            // Remove grass a top tile
+                            let aboveTileData = go.map.data[(digPos.y - 1) * go.map.width + digPos.x]
+                            if (aboveTileData === 3 || aboveTileData === 4) {
+                                go.map.data[(digPos.y - 1) * go.map.width + digPos.x] = 0
+                            }
+
+                            // Adjust new block below to be top-layer
+                            let belowTileData = go.map.data[(digPos.y + 1) * go.map.width + digPos.x]
+                            if (belowTileData === 1) {
+                                go.map.data[(digPos.y + 1) * go.map.width + digPos.x] = 2
+                            }
+
+                            go.shovelInv--
                         }
-
-                        go.shovelInv--
                     }
                 }
             }

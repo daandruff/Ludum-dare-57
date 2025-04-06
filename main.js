@@ -48,12 +48,14 @@ const update = (dt) => {
     })
 
     // Update camera delta
-    if (go.keys.up) {
-        go.cameraDelta = 80
-    } else if (go.keys.down) {
-        go.cameraDelta = -50
-    } else {
-        go.cameraDelta = 0
+    if (go.player.health > 0) {
+        if (go.keys.up) {
+            go.cameraDelta = 80
+        } else if (go.keys.down) {
+            go.cameraDelta = -50
+        } else {
+            go.cameraDelta = 0
+        }
     }
 
     if (go.cameraVisDelta !== go.cameraDelta) {

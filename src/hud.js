@@ -19,8 +19,9 @@ export class Hud {
 
     draw(go) {
         // Draw life
+        let healthHeight = Math.floor(go.player.health / 10)
         go.ctx.fillStyle = '#f5d7af'
-        go.ctx.fillRect(this.pos.x + 2, this.pos.y + 4, 16, 10)
+        go.ctx.fillRect(this.pos.x + 2, this.pos.y + 4 + 10 - healthHeight, 16, healthHeight)
         go.ctx.drawImage(sprLife, this.pos.x, this.pos.y)
 
         // Draw glowsticks
