@@ -93,6 +93,54 @@ export class Player {
                 go.glowstickInv--
             }
         }
+
+        // Dig tile out
+        if (go.keys.dig) {
+            go.keys.dig = 0
+
+            if (go.shovelInv) {
+                let gridPos = {
+                    x: Math.floor((this.pos.x + 8) / 16),
+                    y: Math.floor((this.pos.y + 16) / 16)
+                }
+
+                let digPos = {...gridPos}
+
+                if (go.keys.up || go.keys.down) {
+                    if (go.keys.up) {
+                        digPos.y--
+                    } else {
+                        digPos.y++
+                    }
+                } else {
+                    digPos.x += this.latestDirection
+                }
+
+                // Make sure we are digging inside the map
+                if (digPos.x >= 0 && digPos.x < go.map.width && digPos.y >= 0 && digPos.y < go.map.height) {
+                    let tileData = go.map.data[digPos.y * go.map.width + digPos.x]
+                    
+                    // Make sure you can dig the tile
+                    if (tileData === 1 || tileData === 2) {
+                        go.map.data[digPos.y * go.map.width + digPos.x] = 0
+
+                        // Remove grass a top tile
+                        let aboveTileData = go.map.data[(digPos.y - 1) * go.map.width + digPos.x]
+                        if (aboveTileData === 3 || aboveTileData === 4) {
+                            go.map.data[(digPos.y - 1) * go.map.width + digPos.x] = 0
+                        }
+
+                        // Adjust new block below to be top-layer
+                        let belowTileData = go.map.data[(digPos.y + 1) * go.map.width + digPos.x]
+                        if (belowTileData === 1) {
+                            go.map.data[(digPos.y + 1) * go.map.width + digPos.x] = 2
+                        }
+
+                        go.shovelInv--
+                    }
+                }
+            }
+        }
     }
 
     draw(go) {
