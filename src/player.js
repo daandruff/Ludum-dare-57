@@ -23,6 +23,8 @@ export class Player {
         this.gravity = 0
         this.strength = 2.6
         this.speed = 0.075
+        this.health = 100
+        this.startFall = 0
     }
 
     update(go, dt) {
@@ -38,13 +40,15 @@ export class Player {
         this.pos.y += this.gravity
         if (this.isColliding(go)) {
             this.pos.y = prePos.y
-            if (this.gravity > 0) {
+            if (this.gravity > 0 && this.onGround === false) {
                 this.onGround = true
+                console.log((this.pos.y - this.startFall) / 16)
             }
             this.gravity = 0
         }
-        if (Math.abs(this.gravity) > 1) {
+        if (Math.abs(this.gravity) > 1 && this.onGround === true) {
             this.onGround = false
+            this.startFall = this.pos.y
         }
 
         if (go.keys.jump && this.onGround) {
