@@ -261,6 +261,7 @@ export class Player {
         if (nextLevel) {
             go.mapHeight += 10
             go.map = new Map(go.mapHeight)
+            go.level += 1
         }
         
         go.glowstickList = []

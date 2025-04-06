@@ -3,11 +3,21 @@ const sprShovel = new Image()
 const sprGlowstick = new Image()
 const sprSpeakOn = new Image()
 const sprSpeakOff = new Image()
+const sprDepth1 = new Image()
+const sprDepth2 = new Image()
+const sprDepth3 = new Image()
+const sprDepth4 = new Image()
+const sprDepth5 = new Image()
 sprLife.src = './img/hud_life.png'
 sprShovel.src = './img/hud_shovel.png'
 sprGlowstick.src = './img/hud_glowstick.png'
 sprSpeakOn.src = './img/speaker_on.png'
 sprSpeakOff.src = './img/speaker_off.png'
+sprDepth1.src = './img/depth_1.png'
+sprDepth2.src = './img/depth_2.png'
+sprDepth3.src = './img/depth_3.png'
+sprDepth4.src = './img/depth_4.png'
+sprDepth5.src = './img/depth_5.png'
 
 export class Hud {
     constructor() {
@@ -19,6 +29,8 @@ export class Hud {
             x: 134,
             y: -50
         }
+        this.posDepthX = 264
+        this.posDepthXVis = 314
         this.hidden = false
         this.hurt = 0
         this.locked = false
@@ -27,6 +39,9 @@ export class Hud {
     update(go, dt) {
         if (this.posVis.y != this.pos.y) {
             this.posVis.y += (this.pos.y - this.posVis.y) * 0.1
+        }
+        if (this.posDepthXVis != this.posDepthX) {
+            this.posDepthXVis += (this.posDepthX - this.posDepthXVis) * 0.1
         }
         if (this.hurt > 0) {
             this.hurt -= dt
@@ -59,6 +74,21 @@ export class Hud {
             go.ctx.drawImage(sprShovel, posVis.x - (6 * i) - 7, posVis.y + 4)
         }
 
+        // Draw depth level
+        if (go.level === 1) {
+            go.ctx.drawImage(sprDepth1, Math.floor(this.posDepthXVis), this.pos.y + 5)
+        } else if (go.level === 2) {
+            go.ctx.drawImage(sprDepth2, Math.floor(this.posDepthXVis), this.pos.y + 5)
+        } else if (go.level === 3) {
+            go.ctx.drawImage(sprDepth3, Math.floor(this.posDepthXVis), this.pos.y + 5)
+        } else if (go.level === 4) {
+            go.ctx.drawImage(sprDepth4, Math.floor(this.posDepthXVis), this.pos.y + 5)
+        } else if (go.level === 5) {
+            go.ctx.drawImage(sprDepth5, Math.floor(this.posDepthXVis), this.pos.y + 5)
+        }
+        
+
+        // Draw speaker icon
         if (go.mute) {
             go.ctx.drawImage(sprSpeakOff, go.width - 18, go.height - 18)
         } else {
@@ -73,6 +103,7 @@ export class Hud {
 
         this.hidden = true
         this.pos.y = -50
+        this.posDepthX = 314
     }
 
     show(revertLocked) {
@@ -82,5 +113,6 @@ export class Hud {
         
         this.hidden = false
         this.pos.y = 4
+        this.posDepthX = 264
     }
 }

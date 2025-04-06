@@ -11,7 +11,7 @@ export class DustParticles {
 
         this.timer = 0
         this.spawnrate = 300
-        this.amount = 30
+        this.amount = 50
         this.life = 5000
     }
 
@@ -49,7 +49,7 @@ export class DustParticles {
                 y: Math.random() * (this.height - this.pos.y) + this.pos.y + (this.global ? go.cameraVis + go.cameraVisDelta : 0)
             },
             life: 0,
-            size: Math.ceil(Math.random() * 3),
+            size: Math.ceil(Math.random() * 5),
             layer: Math.random() * 0.5 + 0.5
         })
     }

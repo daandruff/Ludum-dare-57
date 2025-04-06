@@ -14,6 +14,7 @@ const scrYou = new Image()
 const scrHealth = new Image()
 const scrShovel = new Image()
 const scrGlowsticks = new Image()
+const scrDepth = new Image()
 scrTitle.src = './img/titlescreen.png'
 scrShade.src = './img/fullscreen_shade.png'
 scrDeath.src = './img/fullscreen_death.png'
@@ -21,6 +22,7 @@ scrYou.src = './img/fullscreen_you.png'
 scrHealth.src = './img/fullscreen_health.png'
 scrShovel.src = './img/fullscreen_shovel.png'
 scrGlowsticks.src = './img/fullscreen_glowsticks.png'
+scrDepth.src = './img/fullscreen_depth.png'
 
 
 // Game object
@@ -39,6 +41,7 @@ const go = {
     cameraVisDelta: 0,
 
     tutorial: 0,
+    level: 1,
 
     keys: {
         up: 0,
@@ -58,11 +61,11 @@ const go = {
     player: new Player(),
     dust: new DustParticles(0, 0, 288, 152, true),
     hurtEffect: false,
-    glowstickInvStart: 5,
-    glowstickInv: 5,
+    glowstickInvStart: 6,
+    glowstickInv: 6,
     glowstickList: [],
-    shovelInvStart: 3,
-    shovelInv: 3,
+    shovelInvStart: 4,
+    shovelInv: 4,
     time: 0
 }
 
@@ -161,6 +164,8 @@ const draw = () => {
         go.ctx.drawImage(scrShovel, 0, 0)
     } else if (go.tutorial === 4) {
         go.ctx.drawImage(scrGlowsticks, 0, 0)
+    } else if (go.tutorial === 5) {
+        go.ctx.drawImage(scrDepth, 0, 0)
     }
 }
 
@@ -179,7 +184,7 @@ const step = (time) => {
 
 // Input-handling
 document.addEventListener('keydown', (e) => {
-    if (go.tutorial >= 0 && go.tutorial < 5) {
+    if (go.tutorial >= 0 && go.tutorial < 6) {
         go.tutorial++
         return
     }
