@@ -11,27 +11,37 @@ export class Hud {
             x: 134,
             y: 4
         }
+        this.hurt = 0
     }
 
     update(go, dt) {
-
+        if (this.hurt > 0) {
+            this.hurt -= dt
+        } else {
+            this.hurt = 0
+        }
     }
 
     draw(go) {
+        // HUD shake
+        let posVis = {...this.pos}
+        posVis.x += Math.floor((Math.random() -.5) * 50 * this.hurt / 8000)
+        posVis.y += Math.floor((Math.random() -.5) * 20 * this.hurt / 8000)
+
         // Draw life
         let healthHeight = Math.floor(go.player.health / 10)
         go.ctx.fillStyle = '#f5d7af'
-        go.ctx.fillRect(this.pos.x + 2, this.pos.y + 4 + 10 - healthHeight, 16, healthHeight)
-        go.ctx.drawImage(sprLife, this.pos.x, this.pos.y)
+        go.ctx.fillRect(posVis.x + 2, posVis.y + 4 + 10 - healthHeight, 16, healthHeight)
+        go.ctx.drawImage(sprLife, posVis.x, posVis.y)
 
         // Draw glowsticks
         for (let i = 0; i < go.glowstickInv; i++) {
-            go.ctx.drawImage(sprGlowstick, this.pos.x + (3 * i) + 20, this.pos.y + 4)
+            go.ctx.drawImage(sprGlowstick, posVis.x + (3 * i) + 20, posVis.y + 4)
         }
 
         // Draw shovels
         for (let i = 0; i < go.shovelInv; i++) {
-            go.ctx.drawImage(sprShovel, this.pos.x - (6 * i) - 7, this.pos.y + 4)
+            go.ctx.drawImage(sprShovel, posVis.x - (6 * i) - 7, posVis.y + 4)
         }
     }
 }
