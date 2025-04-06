@@ -10,6 +10,8 @@ const ctx = cnv.getContext('2d')
 const go = {
     cnv: cnv,
     ctx: ctx,
+    music: document.querySelector('.music'),
+    mute: false,
 
     width: 288,
     height: 152,
@@ -26,7 +28,8 @@ const go = {
         right: 0,
         jump: 0,
         use: 0,
-        dig: 0
+        dig: 0,
+        mute: 0
     },
 
     map: new Map(),
@@ -80,6 +83,18 @@ const update = (dt) => {
 
     // Update hud
     go.hud.update(go, dt)
+
+    // Mute game
+    if (go.keys.mute) {
+        go.keys.mute = 0
+        if (go.music.paused) {
+            go.music.play()
+            go.mute = false
+        } else {
+            go.music.pause()
+            go.mute = true
+        }
+    }
 }
 
 // Main draw-function
@@ -121,6 +136,7 @@ document.addEventListener('keydown', (e) => {
     if (e.code === 'Space') { go.keys.jump = 1 }
     if (e.code === 'KeyA') { go.keys.use = 1 }
     if (e.code === 'KeyS') { go.keys.dig = 1 }
+    if (e.code === 'KeyM') { go.keys.mute = 1 }
 })
 
 document.addEventListener('keyup', (e) => {
@@ -131,6 +147,7 @@ document.addEventListener('keyup', (e) => {
     if (e.code === 'Space') { go.keys.jump = 0 }
     if (e.code === 'KeyA') { go.keys.use = 0 }
     if (e.code === 'KeyS') { go.keys.dig = 0 }
+    if (e.code === 'KeyM') { go.keys.mute = 0 }
 })
 
 // Init loop
