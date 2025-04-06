@@ -76,15 +76,15 @@ export class Hud {
 
         // Draw depth level
         if (go.level === 1) {
-            go.ctx.drawImage(sprDepth1, Math.floor(this.posDepthXVis), this.pos.y + 5)
+            go.ctx.drawImage(sprDepth1, Math.floor(this.posDepthXVis), 9)
         } else if (go.level === 2) {
-            go.ctx.drawImage(sprDepth2, Math.floor(this.posDepthXVis), this.pos.y + 5)
+            go.ctx.drawImage(sprDepth2, Math.floor(this.posDepthXVis), 9)
         } else if (go.level === 3) {
-            go.ctx.drawImage(sprDepth3, Math.floor(this.posDepthXVis), this.pos.y + 5)
+            go.ctx.drawImage(sprDepth3, Math.floor(this.posDepthXVis), 9)
         } else if (go.level === 4) {
-            go.ctx.drawImage(sprDepth4, Math.floor(this.posDepthXVis), this.pos.y + 5)
+            go.ctx.drawImage(sprDepth4, Math.floor(this.posDepthXVis), 9)
         } else if (go.level === 5) {
-            go.ctx.drawImage(sprDepth5, Math.floor(this.posDepthXVis), this.pos.y + 5)
+            go.ctx.drawImage(sprDepth5, Math.floor(this.posDepthXVis), 9)
         }
         
 

@@ -15,6 +15,7 @@ const scrHealth = new Image()
 const scrShovel = new Image()
 const scrGlowsticks = new Image()
 const scrDepth = new Image()
+const scrFinal = new Image()
 scrTitle.src = './img/titlescreen.png'
 scrShade.src = './img/fullscreen_shade.png'
 scrDeath.src = './img/fullscreen_death.png'
@@ -23,6 +24,7 @@ scrHealth.src = './img/fullscreen_health.png'
 scrShovel.src = './img/fullscreen_shovel.png'
 scrGlowsticks.src = './img/fullscreen_glowsticks.png'
 scrDepth.src = './img/fullscreen_depth.png'
+scrFinal.src = './img/fullscreen_final.png'
 
 
 // Game object
@@ -42,6 +44,7 @@ const go = {
 
     tutorial: 0,
     level: 1,
+    final: false,
 
     keys: {
         up: 0,
@@ -71,7 +74,7 @@ const go = {
 
 // Main update-function
 const update = (dt) => {
-    if (go.tutorial !== 0) {
+    if (go.tutorial !== 0 && !go.final) {
         go.map.update(go, dt)
         go.player.update(go, dt)
     }
@@ -140,7 +143,7 @@ const draw = () => {
         glowstick.draw(go)
     })
     go.dust.draw(go)
-    if (go.tutorial !== 0) {
+    if (go.tutorial !== 0 && !go.final) {
         go.map.draw(go)
         go.player.draw(go)
     }
@@ -154,6 +157,8 @@ const draw = () => {
     }
 
     go.hud.draw(go)
+
+    // Draw tutorial
     if (go.tutorial === 0) {
         go.ctx.drawImage(scrTitle, 0, 0)
     } else if (go.tutorial === 1) {
@@ -166,6 +171,11 @@ const draw = () => {
         go.ctx.drawImage(scrGlowsticks, 0, 0)
     } else if (go.tutorial === 5) {
         go.ctx.drawImage(scrDepth, 0, 0)
+    }
+
+    // Draw final screen
+    if (go.final) {
+        go.ctx.drawImage(scrFinal, 0, 0)
     }
 }
 
@@ -186,6 +196,10 @@ const step = (time) => {
 document.addEventListener('keydown', (e) => {
     if (go.tutorial >= 0 && go.tutorial < 6) {
         go.tutorial++
+        return
+    }
+
+    if (go.final) {
         return
     }
 

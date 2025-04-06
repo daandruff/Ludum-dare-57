@@ -262,6 +262,10 @@ export class Player {
             go.mapHeight += 10
             go.map = new Map(go.mapHeight)
             go.level += 1
+
+            if (go.level > 5) {
+                go.final = true
+            }
         }
         
         go.glowstickList = []
@@ -285,7 +289,9 @@ export class Player {
             }
         }, 500)
         setTimeout(() => {
-            go.hud.show(true)
+            if (!go.final) {
+                go.hud.show(true)
+            }
         }, 1000)
         
         
