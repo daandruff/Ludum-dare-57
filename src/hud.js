@@ -40,7 +40,7 @@ export class Hud {
 
         // Draw glowsticks
         for (let i = 0; i < go.glowstickInv; i++) {
-            go.ctx.drawImage(sprGlowstick, posVis.x + (3 * i) + 20, posVis.y + 4)
+            go.ctx.drawImage(sprGlowstick, posVis.x + (4 * i) + 20, posVis.y + 4)
         }
 
         // Draw shovels
