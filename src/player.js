@@ -77,17 +77,21 @@ export class Player {
             }
         }
 
+        // Throw glowstick
         if (go.keys.use) {
             go.keys.use = 0
 
             // Calculate throwing force
-            let force = 0.02
-            if (go.keys.right || go.keys.right) {
-                force += 0.05
+            if (go.glowstickInv) {
+                let force = 0.02
+                if (go.keys.right || go.keys.right) {
+                    force += 0.05
+                }
+                force = force * this.latestDirection
+    
+                go.glowstickList.push(new Glowstick(this.pos.x, this.pos.y, force))
+                go.glowstickInv--
             }
-            force = force * this.latestDirection
-
-            go.glowstickList.push(new Glowstick(this.pos.x, this.pos.y, force))
         }
     }
 

@@ -21,7 +21,6 @@ export class DustParticles {
         if (this.timer >= this.spawnrate) {
             this.timer = 0
             if (this.particles.length < this.amount) {
-                console.log('create particle')
                 this.createParticle(go)
             }
         }

@@ -1,4 +1,5 @@
 import { Map } from "./src/map.js"
+import { Hud } from "./src/hud.js"
 import { Player } from "./src/player.js"
 import { DustParticles } from "./src/dust-particles.js"
 
@@ -24,14 +25,17 @@ const go = {
         left: 0,
         right: 0,
         jump: 0,
-        use: 0
+        use: 0,
+        dig: 0
     },
 
     map: new Map(),
+    hud: new Hud(),
     player: new Player(),
     dust: new DustParticles(0, 0, 288, 152, true),
     glowstickInv: 4,
     glowstickList: [],
+    shovelInv: 3,
     time: 0
 }
 
@@ -67,6 +71,9 @@ const update = (dt) => {
 
     // Update particle effects
     go.dust.update(go, dt)
+
+    // Update hud
+    go.hud.update(go, dt)
 }
 
 // Main draw-function
@@ -80,6 +87,7 @@ const draw = () => {
     go.dust.draw(go)
     go.map.draw(go)
     go.player.draw(go)
+    go.hud.draw(go)
 }
 
 // Main loop
@@ -103,6 +111,7 @@ document.addEventListener('keydown', (e) => {
     if (e.code === 'ArrowRight') { go.keys.right = 1 }
     if (e.code === 'Space') { go.keys.jump = 1 }
     if (e.code === 'KeyA') { go.keys.use = 1 }
+    if (e.code === 'KeyS') { go.keys.dig = 1 }
 })
 
 document.addEventListener('keyup', (e) => {
@@ -112,6 +121,7 @@ document.addEventListener('keyup', (e) => {
     if (e.code === 'ArrowRight') { go.keys.right = 0 }
     if (e.code === 'Space') { go.keys.jump = 0 }
     if (e.code === 'KeyA') { go.keys.use = 0 }
+    if (e.code === 'KeyS') { go.keys.dig = 0 }
 })
 
 // Init loop
