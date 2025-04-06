@@ -6,6 +6,21 @@ import { DustParticles } from "./src/dust-particles.js"
 const cnv = document.querySelector('canvas')
 const ctx = cnv.getContext('2d')
 
+// Screens
+const scrShade = new Image()
+const scrDeath = new Image()
+const scrYou = new Image()
+const scrHealth = new Image()
+const scrShovel = new Image()
+const scrGlowsticks = new Image()
+scrShade.src = './img/fullscreen_shade.png'
+scrDeath.src = './img/fullscreen_death.png'
+scrYou.src = './img/fullscreen_you.png'
+scrHealth.src = './img/fullscreen_health.png'
+scrShovel.src = './img/fullscreen_shovel.png'
+scrGlowsticks.src = './img/fullscreen_glowsticks.png'
+
+
 // Game object
 const go = {
     cnv: cnv,
@@ -21,6 +36,8 @@ const go = {
     cameraDelta: 0,
     cameraVisDelta: 0,
 
+    tutorial: 1,
+
     keys: {
         up: 0,
         down: 0,
@@ -29,6 +46,7 @@ const go = {
         jump: 0,
         use: 0,
         dig: 0,
+        reset: 0,
         mute: 0
     },
 
@@ -38,9 +56,11 @@ const go = {
     player: new Player(),
     dust: new DustParticles(0, 0, 288, 152, true),
     hurtEffect: false,
+    glowstickInvStart: 5,
     glowstickInv: 5,
     glowstickList: [],
-    shovelInv: 4,
+    shovelInvStart: 3,
+    shovelInv: 3,
     time: 0
 }
 
@@ -116,7 +136,23 @@ const draw = () => {
     if (go.hurtEffect) {
         go.hurtEffect.draw(go)
     }
+
+    if (go.player.health <= 0) {
+        go.ctx.drawImage(scrShade, 0, 0)
+        go.ctx.drawImage(scrDeath, 0, 0)
+    }
+
     go.hud.draw(go)
+
+    if (go.tutorial === 1) {
+        go.ctx.drawImage(scrYou, 0, 0)
+    } else if (go.tutorial === 2) {
+        go.ctx.drawImage(scrHealth, 0, 0)
+    } else if (go.tutorial === 3) {
+        go.ctx.drawImage(scrShovel, 0, 0)
+    } else if (go.tutorial === 4) {
+        go.ctx.drawImage(scrGlowsticks, 0, 0)
+    }
 }
 
 // Main loop
@@ -134,6 +170,11 @@ const step = (time) => {
 
 // Input-handling
 document.addEventListener('keydown', (e) => {
+    if (go.tutorial > 0 && go.tutorial < 5) {
+        go.tutorial++
+        return
+    }
+
     if (e.code === 'ArrowUp') { go.keys.up = 1 }
     if (e.code === 'ArrowDown') { go.keys.down = 1 }
     if (e.code === 'ArrowLeft') { go.keys.left = 1 }
@@ -141,6 +182,7 @@ document.addEventListener('keydown', (e) => {
     if (e.code === 'Space') { go.keys.jump = 1 }
     if (e.code === 'KeyA') { go.keys.dig = 1 }
     if (e.code === 'KeyS') { go.keys.use = 1 }
+    if (e.code === 'KeyR') { go.keys.reset = 1 }
     if (e.code === 'KeyM') { go.keys.mute = 1 }
 })
 
@@ -152,6 +194,7 @@ document.addEventListener('keyup', (e) => {
     if (e.code === 'Space') { go.keys.jump = 0 }
     if (e.code === 'KeyA') { go.keys.dig = 0 }
     if (e.code === 'KeyS') { go.keys.use = 0 }
+    if (e.code === 'KeyR') { go.keys.reset = 0 }
     if (e.code === 'KeyM') { go.keys.mute = 0 }
 })
 

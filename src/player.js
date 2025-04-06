@@ -41,6 +41,7 @@ export class Player {
         this.speed = 0.075
         this.health = 100
         this.startFall = 0
+        this.noFallDamage = false
     }
 
     update(go, dt) {
@@ -58,42 +59,45 @@ export class Player {
             this.pos.y = prePos.y
             if (this.gravity > 0 && this.onGround === false) {
                 this.onGround = true
-
-                let fallHeight = (this.pos.y - this.startFall) / 16
-
-                if (fallHeight > 7) {
-                    this.health -= 100
-                    go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 90, 8)
-                    go.hud.hurt = 1500
-                } else if (fallHeight > 6) {
-                    this.health -= 80
-                    go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 80, 7)
-                    go.hud.hurt = 1250
-                } else if (fallHeight > 5) {
-                    this.health -= 60
-                    go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 70, 6)
-                    go.hud.hurt = 1000
-                } else if (fallHeight > 4) {
-                    this.health -= 40
-                    go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 60, 5)
-                    go.hud.hurt = 750
-                } else if (fallHeight > 3) {
-                    this.health -= 20
-                    go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 50, 4)
-                    go.hud.hurt = 500
+                if (this.noFallDamage) {
+                    this.noFallDamage = false
                 } else {
-                    // Here we should have some landing particles
-                    //go.hurtEffect = new SpotParticles(this.pos.x + 8, this.pos.y + 16, 0, 0, false, 50, 4)
-                }
+                    let fallHeight = (this.pos.y - this.startFall) / 16
 
-                if (fallHeight > 2) {
-                    this.playSound(go, sfxHurt)
-                } else {
-                    this.playSound(go, sfxJump)
-                }
-
-                if (this.health < 0) {
-                    this.health = 0
+                    if (fallHeight > 7) {
+                        this.health -= 100
+                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 90, 8)
+                        go.hud.hurt = 1500
+                    } else if (fallHeight > 6) {
+                        this.health -= 80
+                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 80, 7)
+                        go.hud.hurt = 1250
+                    } else if (fallHeight > 5) {
+                        this.health -= 60
+                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 70, 6)
+                        go.hud.hurt = 1000
+                    } else if (fallHeight > 4) {
+                        this.health -= 40
+                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 60, 5)
+                        go.hud.hurt = 750
+                    } else if (fallHeight > 3) {
+                        this.health -= 20
+                        go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 50, 4)
+                        go.hud.hurt = 500
+                    } else {
+                        // Here we should have some landing particles
+                        //go.hurtEffect = new SpotParticles(this.pos.x + 8, this.pos.y + 16, 0, 0, false, 50, 4)
+                    }
+    
+                    if (fallHeight > 2) {
+                        this.playSound(go, sfxHurt)
+                    } else {
+                        this.playSound(go, sfxJump)
+                    }
+    
+                    if (this.health < 0) {
+                        this.health = 0
+                    }
                 }
             }
             this.gravity = 0
@@ -214,9 +218,14 @@ export class Player {
             go.hud.show()
         }
 
+        if (go.keys.reset && this.health <= 0) {
+            go.keys.reset = 0
+            this.resetLevel(go, false)
+        }
+
         // Check if map is done
         if (this.pos.y > go.map.height * 16 + 200) {
-            this.nextLevel(go)
+            this.resetLevel(go, true)
         }
     }
 
@@ -248,9 +257,12 @@ export class Player {
         }
     }
 
-    nextLevel(go) {
-        go.mapHeight += 20
-        go.map = new Map(go.mapHeight)
+    resetLevel(go, nextLevel = false) {
+        if (nextLevel) {
+            go.mapHeight += 10
+            go.map = new Map(go.mapHeight)
+        }
+        
         go.glowstickList = []
 
         let heightDiff = this.pos.y + 200
@@ -261,8 +273,15 @@ export class Player {
 
         go.hud.hide(true)
         setTimeout(() => {
-            go.glowstickInv += 2
-            go.shovelInv += 2
+            if (nextLevel) {
+                go.glowstickInv += 2
+                go.shovelInv += 2
+                go.glowstickInvStart = go.glowstickInv
+                go.shovelInvStart = go.shovelInv
+            } else {
+                go.glowstickInv = go.glowstickInvStart
+                go.shovelInv = go.shovelInvStart
+            }
         }, 500)
         setTimeout(() => {
             go.hud.show(true)
@@ -270,10 +289,16 @@ export class Player {
         
         
         // Give back health
-        if (this.health > 50) {
-            this.health = 100
+        if (nextLevel) {
+            if (this.health > 50) {
+                this.health = 100
+            } else {
+                this.health += 50
+            }
         } else {
-            this.health += 50
+            this.health = 100
         }
+
+        this.noFallDamage = true
     }
 }
