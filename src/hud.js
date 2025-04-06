@@ -15,10 +15,19 @@ export class Hud {
             x: 134,
             y: 4
         }
+        this.posVis = {
+            x: 134,
+            y: -50
+        }
+        this.hidden = false
         this.hurt = 0
+        this.locked = false
     }
 
     update(go, dt) {
+        if (this.posVis.y != this.pos.y) {
+            this.posVis.y += (this.pos.y - this.posVis.y) * 0.1
+        }
         if (this.hurt > 0) {
             this.hurt -= dt
         } else {
@@ -28,7 +37,9 @@ export class Hud {
 
     draw(go) {
         // HUD shake
-        let posVis = {...this.pos}
+        let posVis = {...this.posVis}
+        posVis.x = Math.floor(posVis.x)
+        posVis.y = Math.floor(posVis.y)
         posVis.x += Math.ceil((Math.random() -.5) * 50 * this.hurt / 8000)
         posVis.y += Math.ceil((Math.random() -.5) * 20 * this.hurt / 8000)
 
@@ -53,5 +64,23 @@ export class Hud {
         } else {
             go.ctx.drawImage(sprSpeakOn, go.width - 18, go.height - 18)
         }
+    }
+
+    hide(setLocked) {
+        if (setLocked) {
+            this.locked = true
+        }
+
+        this.hidden = true
+        this.pos.y = -50
+    }
+
+    show(revertLocked) {
+        if (revertLocked) {
+            this.locked = false
+        }
+        
+        this.hidden = false
+        this.pos.y = 4
     }
 }

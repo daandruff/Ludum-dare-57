@@ -206,6 +206,14 @@ export class Player {
             }
         }
 
+        // Check if ui should be hidden
+        if ((go.keys.up || go.keys.down) && !go.hud.hidden) {
+            go.hud.hide()
+        }
+        if ((!go.keys.up && !go.keys.down) && go.hud.hidden && !go.hud.locked) {
+            go.hud.show()
+        }
+
         // Check if map is done
         if (this.pos.y > go.map.height * 16 + 200) {
             this.nextLevel(go)
@@ -251,7 +259,21 @@ export class Player {
         go.cameraVis -= heightDiff
         go.camera -= heightDiff
 
-        go.glowstickInv += 2
-        go.shovelInv += 2
+        go.hud.hide(true)
+        setTimeout(() => {
+            go.glowstickInv += 2
+            go.shovelInv += 2
+        }, 500)
+        setTimeout(() => {
+            go.hud.show(true)
+        }, 1000)
+        
+        
+        // Give back health
+        if (this.health > 50) {
+            this.health = 100
+        } else {
+            this.health += 50
+        }
     }
 }
