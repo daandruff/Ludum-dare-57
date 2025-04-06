@@ -1,4 +1,5 @@
 import { Glowstick } from "./glowstick.js"
+import { SpotParticles } from "./spot-particles.js"
 
 const sprNormalR = new Image()
 const sprNormalL = new Image()
@@ -47,14 +48,22 @@ export class Player {
 
                 if (fallHeight > 7) {
                     this.health -= 100
+                    go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 90, 8)
                 } else if (fallHeight > 6) {
                     this.health -= 80
+                    go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 80, 7)
                 } else if (fallHeight > 5) {
                     this.health -= 60
+                    go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 70, 6)
                 } else if (fallHeight > 4) {
                     this.health -= 40
-                } else if (fallHeight > 3) {
-                    this.health -= 20
+                    go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 60, 5)
+                } else if (fallHeight > 2) {
+                    this.health -= 15
+                    go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 50, 4)
+                } else {
+                    // Here we should have some landing particles
+                    //go.hurtEffect = new SpotParticles(this.pos.x + 8, this.pos.y + 16, 0, 0, false, 50, 4)
                 }
 
                 if (this.health < 0) {

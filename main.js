@@ -33,6 +33,7 @@ const go = {
     hud: new Hud(),
     player: new Player(),
     dust: new DustParticles(0, 0, 288, 152, true),
+    hurtEffect: false,
     glowstickInv: 4,
     glowstickList: [],
     shovelInv: 3,
@@ -73,6 +74,9 @@ const update = (dt) => {
 
     // Update particle effects
     go.dust.update(go, dt)
+    if (go.hurtEffect) {
+        go.hurtEffect.update(go, dt)
+    }
 
     // Update hud
     go.hud.update(go, dt)
@@ -89,6 +93,9 @@ const draw = () => {
     go.dust.draw(go)
     go.map.draw(go)
     go.player.draw(go)
+    if (go.hurtEffect) {
+        go.hurtEffect.draw(go)
+    }
     go.hud.draw(go)
 }
 
