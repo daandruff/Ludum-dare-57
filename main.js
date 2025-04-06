@@ -1,6 +1,6 @@
 import { Map } from "./src/map.js"
 import { Player } from "./src/player.js"
-import { Particles } from "./src/particles.js"
+import { DustParticles } from "./src/dust-particles.js"
 
 const cnv = document.querySelector('canvas')
 const ctx = cnv.getContext('2d')
@@ -29,7 +29,7 @@ const go = {
 
     map: new Map(),
     player: new Player(),
-    dust: new Particles(0, 0, 288, 152, true),
+    dust: new DustParticles(0, 0, 288, 152, true),
     glowstickInv: 4,
     glowstickList: [],
     time: 0
