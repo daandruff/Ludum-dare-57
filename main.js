@@ -2,6 +2,7 @@ import { Map } from "./src/map.js"
 import { Hud } from "./src/hud.js"
 import { Player } from "./src/player.js"
 import { DustParticles } from "./src/dust-particles.js"
+import { Effects } from "./src/effects.js"
 
 const cnv = document.querySelector('canvas')
 const ctx = cnv.getContext('2d')
@@ -63,6 +64,7 @@ const go = {
     hud: new Hud(),
     player: new Player(),
     dust: new DustParticles(0, 0, 288, 152, true),
+    effects: new Effects,
     hurtEffect: false,
     glowstickInvStart: 6,
     glowstickInv: 6,
@@ -116,6 +118,8 @@ const update = (dt) => {
     if (go.tutorial !== 0) {
         go.hud.update(go, dt)
     }
+
+    go.effects.update(go, dt)
 
     // Mute game
     if (go.keys.mute) {
@@ -172,6 +176,8 @@ const draw = () => {
     } else if (go.tutorial === 5) {
         go.ctx.drawImage(scrDepth, 0, 0)
     }
+
+    go.effects.draw(go)
 
     // Draw final screen
     if (go.final) {

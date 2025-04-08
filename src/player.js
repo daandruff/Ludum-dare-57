@@ -113,6 +113,7 @@ export class Player {
                 this.onGround = false
                 this.startFall = this.pos.y
                 this.playSound(go, sfxJump)
+                go.effects.create('jumpoff', this.pos.x, this.pos.y)
             }
             
             if (go.keys.right) {
