@@ -42,6 +42,7 @@ export class Player {
         this.health = 100
         this.startFall = 0
         this.noFallDamage = false
+        this.timeSinceDust = 0
     }
 
     update(go, dt) {
@@ -59,6 +60,7 @@ export class Player {
             this.pos.y = prePos.y
             if (this.gravity > 0 && this.onGround === false) {
                 this.onGround = true
+                go.effects.create('landing', this.pos.x - 8, Math.ceil(this.pos.y / 16) * 16 + 1)
                 if (this.noFallDamage) {
                     this.noFallDamage = false
                 } else {
@@ -84,9 +86,6 @@ export class Player {
                         this.health -= 20
                         go.hurtEffect = new SpotParticles(0, 0, go.width, go.height, true, 90, 4)
                         go.hud.hurt = 500
-                    } else {
-                        // Here we should have some landing particles
-                        //go.hurtEffect = new SpotParticles(this.pos.x + 8, this.pos.y + 16, 0, 0, false, 50, 4)
                     }
     
                     if (fallHeight > 3) {
@@ -116,18 +115,29 @@ export class Player {
                 go.effects.create('jumpoff', this.pos.x, this.pos.y)
             }
             
-            if (go.keys.right) {
-                this.pos.x += this.speed * dt
-                this.latestDirection = 1
-            }
-            if (go.keys.left) {
-                this.pos.x -= this.speed * dt
-                this.latestDirection = -1
+            if (go.keys.left || go.keys.right) {
+                if (go.keys.right) {
+                    this.pos.x += this.speed * dt
+                    this.latestDirection = 1
+                }
+                if (go.keys.left) {
+                    this.pos.x -= this.speed * dt
+                    this.latestDirection = -1
+                }
+
+                if (this.onGround) {
+                    if (this.timeSinceDust > 50) {
+                        let randPos = Math.round((Math.random() * 8) - 4)
+                        go.effects.create('run', this.pos.x + 5 + randPos, (1 + Math.ceil(this.pos.y / 16)) * 16 - 3)
+                        this.timeSinceDust = -(Math.random() * 150)
+                    }
+                }
             }
         }
         if (this.isColliding(go)) {
             this.pos.x = prePos.x
         }
+        this.timeSinceDust += dt
 
         // Update sprite
         if (this.health > 0) {
