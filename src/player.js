@@ -218,7 +218,7 @@ export class Player {
             go.hud.show()
         }
 
-        if (go.keys.reset && this.health <= 0) {
+        if (go.keys.reset) {
             go.keys.reset = 0
             this.resetLevel(go, false)
         }
