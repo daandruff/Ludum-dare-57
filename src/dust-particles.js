@@ -1,5 +1,5 @@
 export class DustParticles {
-    constructor(x, y, w, h, g) {
+    constructor(x, y, w, h, g, a = 50, m = 5, c = '#c07d58') {
         this.particles = []
         this.pos = {
             x: x,
@@ -8,10 +8,12 @@ export class DustParticles {
         this.width = w
         this.height = h
         this.global = g
+        this.maxSize = m
+        this.color = c
 
         this.timer = 0
         this.spawnrate = 300
-        this.amount = 50
+        this.amount = a
         this.life = 5000
     }
 
@@ -36,7 +38,7 @@ export class DustParticles {
     }
 
     draw(go) {
-        go.ctx.fillStyle = '#c07d58'
+        go.ctx.fillStyle = this.color
         this.particles.forEach(particle => {
             go.ctx.fillRect(Math.floor(particle.pos.x), Math.floor(particle.pos.y - (go.cameraVis * particle.layer) + (go.cameraVisDelta * particle.layer)), particle.size, particle.size)
         })
@@ -49,7 +51,7 @@ export class DustParticles {
                 y: Math.random() * (this.height - this.pos.y) + this.pos.y + (this.global ? go.cameraVis + go.cameraVisDelta : 0)
             },
             life: 0,
-            size: Math.ceil(Math.random() * 5),
+            size: Math.ceil(Math.random() * this.maxSize),
             layer: Math.random() * 0.5 + 0.5
         })
     }
