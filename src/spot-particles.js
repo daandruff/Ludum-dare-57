@@ -50,7 +50,7 @@ export class SpotParticles {
         this.particles.push({
             pos: {
                 x: Math.random() * (this.width - this.pos.x) + this.pos.x,
-                y: Math.random() * (this.height - this.pos.y) + this.pos.y + (this.global ? go.cameraVis + go.cameraVisDelta : 0)
+                y: Math.random() * (this.height - this.pos.y) + this.pos.y + (this.global ? go.cameraVis : 0)
             },
             life: 0,
             death: this.life = Math.random() * this.maxLife,
