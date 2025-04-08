@@ -194,6 +194,8 @@ const step = (time) => {
 
 // Input-handling
 document.addEventListener('keydown', (e) => {
+    e.preventDefault()
+
     if (go.tutorial >= 0 && go.tutorial < 6) {
         go.tutorial++
         return
@@ -215,6 +217,8 @@ document.addEventListener('keydown', (e) => {
 })
 
 document.addEventListener('keyup', (e) => {
+    e.preventDefault()
+    
     if (e.code === 'ArrowUp') { go.keys.up = 0 }
     if (e.code === 'ArrowDown') { go.keys.down = 0 }
     if (e.code === 'ArrowLeft') { go.keys.left = 0 }
