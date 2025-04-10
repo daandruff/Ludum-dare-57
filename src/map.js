@@ -1,3 +1,5 @@
+import { Pickup } from "./pickup.js"
+
 const sprShadow = new Image()
 const sprBlock = new Image()
 const sprBlockTop = new Image()
@@ -17,12 +19,17 @@ export class Map {
         this.height = height
 
         this.data = Array(this.width * this.height)
-        this.generate()
+        this.pickups = []
         this.timer = 0
+        this.generate()
     }
 
     update(go, dt) {
         this.timer += dt / 1000
+        this.pickups.forEach(pickup => {
+            pickup.update(go, dt)
+        })
+        this.pickups = this.pickups.filter(pickup => !pickup.collected)
     }
 
     draw(go) {
@@ -48,6 +55,17 @@ export class Map {
                 if (!(yPos < -16 || yPos > go.height + 16)) {
                     const tile = this.data[y * this.width + x]
 
+                    let lightDistance = 100
+                    lightPositions.forEach(position => {
+                        const dx = position.x - x
+                        const dy = position.y - y
+                        const distance = Math.sqrt(dx * dx + dy * dy)
+
+                        if (distance < lightDistance) {
+                            lightDistance = distance
+                        }
+                    })
+
                     let selectedTileSprite = false
                     if (tile === 1) { selectedTileSprite = sprBlock }
                     if (tile === 2) { selectedTileSprite = sprBlockTop }
@@ -55,18 +73,6 @@ export class Map {
                     if (tile === 4) { selectedTileSprite = sprBlockGrassB }
 
                     if (selectedTileSprite) {
-                        let lightDistance = 100
-                        lightPositions.forEach(position => {
-                            const dx = position.x - x
-                            const dy = position.y - y
-                            const distance = Math.sqrt(dx * dx + dy * dy)
-
-                            if (distance < lightDistance) {
-                                lightDistance = distance
-                            }
-                        })
-
-
                         if (lightDistance < 3.5 && lightDistance >= 2.5) {
                             go.ctx.drawImage(selectedTileSprite, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
                             go.ctx.drawImage(sprShadow, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
@@ -74,6 +80,17 @@ export class Map {
                         if (lightDistance < 2.5) {
                             go.ctx.drawImage(selectedTileSprite, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
                         }
+                    } else {
+                        const pickupOnTile = this.pickups.filter(pickup => pickup.pos.x === x && pickup.pos.y === y)
+                        pickupOnTile.forEach(pickup => {
+                            if (lightDistance < 3.5 && lightDistance >= 2.5) {
+                                pickup.draw(go, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
+                                go.ctx.drawImage(sprShadow, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
+                            }
+                            if (lightDistance < 2.5) {
+                                pickup.draw(go, x * 16, Math.round(y * 16 - go.cameraVis + go.cameraVisDelta))
+                            }
+                        })
                     }
                 }
             }
@@ -145,6 +162,18 @@ export class Map {
                                 this.data[(y - 1) * this.width + x] = 4
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        // Add pickups
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                if (this.data[y * this.width + x] === 0) {
+                    if (Math.random() > 0.9 && y > 4) {
+                        const thisPickup = new Pickup(x, y)
+                        this.pickups.push(thisPickup)
                     }
                 }
             }

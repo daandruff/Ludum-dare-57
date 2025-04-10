@@ -40,6 +40,9 @@ export class Player {
         this.strength = 2.6
         this.speed = 0.075
         this.health = 100
+        this.inventory = {
+            screws: 0
+        },
         this.startFall = 0
         this.noFallDamage = false
         this.timeSinceDust = 0
