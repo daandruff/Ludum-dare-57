@@ -18,6 +18,7 @@ export class Pickup {
                 go.effects.create('collect', this.pos.x * 16, this.pos.y * 16)
             }
             go.player.inventory.screws++
+            go.hud.screwBounce = 5
         }
     }
 

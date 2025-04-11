@@ -41,6 +41,7 @@ export class Hud {
         this.hidden = false
         this.hurt = 0
         this.locked = false
+        this.screwBounce = 0
     }
 
     update(go, dt) {
@@ -54,6 +55,13 @@ export class Hud {
             this.hurt -= dt
         } else {
             this.hurt = 0
+        }
+
+        if (this.screwBounce > 0) {
+            this.screwBounce = this.screwBounce * 0.9
+            if (this.screwBounce < 0) {
+                this.screwBounce = 0
+            }
         }
     }
 
@@ -104,9 +112,9 @@ export class Hud {
 
         // Draw inventory
         const screwBase = go.width / 2 - 20
-        go.ctx.drawImage(sprInventory, screwBase, Math.floor(go.height - 10 + -this.posVis.y))
-        go.ctx.drawImage(sprScrew, screwBase + 2, Math.floor(go.height - 11 + -this.posVis.y))
-        this.numberSprite.draw(go, go.player.inventory.screws, screwBase + 20, Math.floor(go.height - 5 + -this.posVis.y))
+        go.ctx.drawImage(sprInventory, screwBase, Math.floor(go.height - 10 + -this.posVis.y) + Math.floor(this.screwBounce))
+        go.ctx.drawImage(sprScrew, screwBase + 2, Math.floor(go.height - 11 + -this.posVis.y) - Math.floor(this.screwBounce))
+        this.numberSprite.draw(go, go.player.inventory.screws, screwBase + 20, Math.floor(go.height - 5 + -this.posVis.y + Math.floor(this.screwBounce)))
     }
 
     hide(setLocked) {
