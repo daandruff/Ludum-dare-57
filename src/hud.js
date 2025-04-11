@@ -1,8 +1,12 @@
+import { NumberSprite } from "./number.js"
+
 const sprLife = new Image()
 const sprShovel = new Image()
 const sprGlowstick = new Image()
 const sprSpeakOn = new Image()
 const sprSpeakOff = new Image()
+const sprInventory = new Image()
+const sprScrew = new Image()
 const sprDepth1 = new Image()
 const sprDepth2 = new Image()
 const sprDepth3 = new Image()
@@ -13,6 +17,8 @@ sprShovel.src = './img/hud_shovel.png'
 sprGlowstick.src = './img/hud_glowstick.png'
 sprSpeakOn.src = './img/speaker_on.png'
 sprSpeakOff.src = './img/speaker_off.png'
+sprInventory.src = './img/hud_inventory.png'
+sprScrew.src = './img/hud_screw.png'
 sprDepth1.src = './img/depth_1.png'
 sprDepth2.src = './img/depth_2.png'
 sprDepth3.src = './img/depth_3.png'
@@ -29,6 +35,7 @@ export class Hud {
             x: 134,
             y: -50
         }
+        this.numberSprite = new NumberSprite(),
         this.posDepthX = 264
         this.posDepthXVis = 314
         this.hidden = false
@@ -94,6 +101,12 @@ export class Hud {
         } else {
             go.ctx.drawImage(sprSpeakOn, go.width - 18, go.height - 18)
         }
+
+        // Draw inventory
+        const screwBase = go.width / 2 - 20
+        go.ctx.drawImage(sprInventory, screwBase, Math.floor(go.height - 10 + -this.posVis.y))
+        go.ctx.drawImage(sprScrew, screwBase + 2, Math.floor(go.height - 11 + -this.posVis.y))
+        this.numberSprite.draw(go, go.player.inventory.screws, screwBase + 20, Math.floor(go.height - 5 + -this.posVis.y))
     }
 
     hide(setLocked) {

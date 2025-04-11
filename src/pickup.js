@@ -14,11 +14,10 @@ export class Pickup {
     update(go, dt) {
         if (Math.round(go.player.pos.x / 16) === this.pos.x && Math.round(go.player.pos.y / 16) === this.pos.y) {
             this.collected = true
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < 5; i++) {
                 go.effects.create('collect', this.pos.x * 16, this.pos.y * 16)
             }
             go.player.inventory.screws++
-            console.log(go.player.inventory.screws)
         }
     }
 
