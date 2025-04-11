@@ -27,8 +27,8 @@ export class Effects {
                 effect.pos.y += dt / 5 * effect.velocity.y
 
                 if (effect.name === 'collect') {
-                    effect.pos.x += (go.player.pos.x - effect.pos.x) * dt / 200
-                    effect.pos.y += (go.player.pos.y - effect.pos.y) * dt / 200
+                    effect.pos.x += (effect.orPos.x - effect.pos.x) * dt / 200
+                    effect.pos.y += (effect.orPos.y - effect.pos.y) * dt / 200
                 }
 
                 effect.velocity.x *= 0.99
@@ -96,6 +96,10 @@ export class Effects {
             newEffect.velocity = {
                 x: (Math.random() - 0.5) * 3,
                 y: (Math.random() - 0.5) * 3 
+            }
+            newEffect.orPos = {
+                x: x,
+                y: y
             }
         }
 
