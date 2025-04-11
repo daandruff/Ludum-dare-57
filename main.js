@@ -201,6 +201,34 @@ const step = (time) => {
     requestAnimationFrame(step)
 }
 
+const adjustScreen = () => {
+    const canWidth = go.cnv.width
+    const canHeight = go.cnv.height
+    const winWidth = window.innerWidth
+    const winHeight = window.innerHeight
+
+    console.log(canWidth / canHeight, winWidth / winHeight)
+
+    let scale = 1
+    if (canWidth / canHeight > winWidth / winHeight) {
+        // Scale based on width
+        scale = winWidth / canWidth   
+    } else {
+        // Scale based on height
+        scale = winHeight / canHeight 
+    }
+
+    go.cnv.style.transform = `translate(-50%, -50%) scale(${scale})`
+}
+
+// Init the app
+const init = () => {
+    adjustScreen()
+
+    // Init loop
+    step(0)
+}
+
 // Input-handling
 document.addEventListener('keydown', (e) => {
     e.preventDefault()
@@ -239,5 +267,8 @@ document.addEventListener('keyup', (e) => {
     if (e.code === 'KeyM') { go.keys.mute = 0 }
 })
 
-// Init loop
-step(0)
+window.addEventListener('resize', () => {
+    adjustScreen()
+})
+
+init()
