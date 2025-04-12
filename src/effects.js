@@ -1,12 +1,14 @@
+const sprBreak = new Image()
 const sprJumpOff = new Image()
-sprJumpOff.src = './img/effect_jumpoff.png'
 const sprLanding = new Image()
-sprLanding.src = './img/effect_land.png'
 const sprRun = new Image()
 const sprRunM = new Image()
+const sprCollect = new Image()
+sprBreak.src = './img/effect_break.png'
+sprJumpOff.src = './img/effect_jumpoff.png'
+sprLanding.src = './img/effect_land.png'
 sprRun.src = './img/effect_run.png'
 sprRunM.src = './img/effect_run_mirror.png'
-const sprCollect = new Image()
 sprCollect.src = './img/effect_collect.png'
 
 export class Effects {
@@ -53,6 +55,15 @@ export class Effects {
                 x: x,
                 y: y
             }
+        }
+
+        if (effect === 'break') {
+            newEffect.name = effect
+            newEffect.life = 0.3
+            newEffect.sprite = sprBreak
+            newEffect.frames = 4
+            newEffect.width = 16
+            newEffect.height = 16
         }
 
         if (effect === 'jumpoff') {

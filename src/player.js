@@ -41,7 +41,8 @@ export class Player {
         this.speed = 0.075
         this.health = 100
         this.inventory = {
-            screws: 0
+            screws: 0,
+            rocks: 0
         },
         this.startFall = 0
         this.noFallDamage = false
@@ -217,6 +218,12 @@ export class Player {
                             }
 
                             go.shovelInv--
+                            go.effects.create('break', digPos.x * 16, digPos.y * 16)
+                            this.inventory.rocks += Math.ceil(Math.random() * 3)
+                            for (let i = 0; i < 5; i++) {
+                                go.effects.create('collect', digPos.x * 16, digPos.y * 16)
+                            }
+                            go.hud.rockBounce = go.hud.bounceVal
                             this.playSound(go, sfxDig)
                         }
                     }

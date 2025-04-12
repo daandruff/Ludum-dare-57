@@ -7,6 +7,7 @@ const sprSpeakOn = new Image()
 const sprSpeakOff = new Image()
 const sprInventory = new Image()
 const sprScrew = new Image()
+const sprRock = new Image()
 const sprDepth1 = new Image()
 const sprDepth2 = new Image()
 const sprDepth3 = new Image()
@@ -19,6 +20,7 @@ sprSpeakOn.src = './img/speaker_on.png'
 sprSpeakOff.src = './img/speaker_off.png'
 sprInventory.src = './img/hud_inventory.png'
 sprScrew.src = './img/hud_screw.png'
+sprRock.src = './img/hud_rock.png'
 sprDepth1.src = './img/depth_1.png'
 sprDepth2.src = './img/depth_2.png'
 sprDepth3.src = './img/depth_3.png'
@@ -41,7 +43,9 @@ export class Hud {
         this.hidden = false
         this.hurt = 0
         this.locked = false
+        this.bounceVal = 5
         this.screwBounce = 0
+        this.rockBounce = 0
     }
 
     update(go, dt) {
@@ -61,6 +65,12 @@ export class Hud {
             this.screwBounce = this.screwBounce * 0.9
             if (this.screwBounce < 0) {
                 this.screwBounce = 0
+            }
+        }
+        if (this.rockBounce > 0) {
+            this.rockBounce = this.rockBounce * 0.9
+            if (this.rockBounce < 0) {
+                this.rockBounce = 0
             }
         }
     }
@@ -111,10 +121,15 @@ export class Hud {
         }
 
         // Draw inventory
-        const screwBase = go.width / 2 - 20
+        const screwBase = go.width / 2 - 42
         go.ctx.drawImage(sprInventory, screwBase, Math.floor(go.height - 10 + -this.posVis.y) + Math.floor(this.screwBounce))
         go.ctx.drawImage(sprScrew, screwBase + 2, Math.floor(go.height - 11 + -this.posVis.y) - Math.floor(this.screwBounce))
         this.numberSprite.draw(go, go.player.inventory.screws, screwBase + 20, Math.floor(go.height - 5 + -this.posVis.y + Math.floor(this.screwBounce)))
+
+        const rockBase = go.width / 2 - 20 + 22 
+        go.ctx.drawImage(sprInventory, rockBase, Math.floor(go.height - 10 + -this.posVis.y) + Math.floor(this.rockBounce))
+        go.ctx.drawImage(sprRock, rockBase + 2, Math.floor(go.height - 11 + -this.posVis.y) - Math.floor(this.rockBounce))
+        this.numberSprite.draw(go, go.player.inventory.rocks, rockBase + 20, Math.floor(go.height - 5 + -this.posVis.y + Math.floor(this.rockBounce)))
     }
 
     hide(setLocked) {
